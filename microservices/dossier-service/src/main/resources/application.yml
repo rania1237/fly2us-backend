@@ -1,0 +1,39 @@
+server:
+  port: 8082
+
+spring:
+  application:
+    name: dossier-service
+  cloud:
+    config:
+      enabled: false
+
+  datasource:
+    url: jdbc:mysql://localhost:3306/fly2us_dossiers?createDatabaseIfNotExist=true&useSSL=false&serverTimezone=UTC
+    username: root
+    password:
+    driver-class-name: com.mysql.cj.jdbc.Driver
+
+  jpa:
+    hibernate:
+      ddl-auto: update
+    show-sql: true
+    properties:
+      hibernate:
+        dialect: org.hibernate.dialect.MySQL8Dialect
+
+eureka:
+  client:
+    service-url:
+      defaultZone: http://eureka:eureka123@localhost:8761/eureka/
+  instance:
+    prefer-ip-address: true
+
+dossier:
+  status:
+    default: EN_ATTENTE_DOCUMENTS
+  expiration-days: 30
+
+logging:
+  level:
+    fly2us.tn.dossier: DEBUG
