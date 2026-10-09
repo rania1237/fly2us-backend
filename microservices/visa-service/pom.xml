@@ -12,9 +12,10 @@
         <relativePath>../../pom.xml</relativePath>
     </parent>
 
-    <artifactId>dossier-service</artifactId>
-    <name>Dossier Service</name>
-    <description>Service de gestion des dossiers</description>
+    <!-- ✅ CORRIGÉ : visa-service au lieu de dossier-service -->
+    <artifactId>visa-service</artifactId>
+    <name>Visa Service</name>
+    <description>Service de gestion des visas</description>
 
     <properties>
         <java.version>17</java.version>
@@ -78,7 +79,8 @@
                 <groupId>org.springframework.boot</groupId>
                 <artifactId>spring-boot-maven-plugin</artifactId>
                 <configuration>
-                    <mainClass>fly2us.tn.dossier.DossierServiceApplication</mainClass>
+                    <!-- ✅ CORRIGÉ : VisaServiceApplication au lieu de DossierServiceApplication -->
+                    <mainClass>fly2us.tn.dossier.VisaServiceApplication</mainClass>
                 </configuration>
             </plugin>
         </plugins>
