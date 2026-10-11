@@ -10,27 +10,27 @@ spring:
       enabled: false
 
   datasource:
-    url: jdbc:mysql://localhost:3306/fly2us_payments?createDatabaseIfNotExist=true&useSSL=false&serverTimezone=UTC
-    username: root
-    password:
+    url: ${DB_PAYMENT_URL:jdbc:mysql://localhost:3306/fly2us_payments?createDatabaseIfNotExist=true&useSSL=false&serverTimezone=UTC}
+    username: ${DB_USERNAME:root}
+    password: ${DB_PASSWORD:}
     driver-class-name: com.mysql.cj.jdbc.Driver
 
   jpa:
     hibernate:
       ddl-auto: update
-    show-sql: true
+    show-sql: false
     properties:
       hibernate:
         dialect: org.hibernate.dialect.MySQL8Dialect
 
   # ==========================================
-  # ✅ MAILTRAP (au lieu de Gmail)
+  # Mailtrap (config via variables d'environnement)
   # ==========================================
   mail:
-    host: sandbox.smtp.mailtrap.io
-    port: 2525
-    username: d2548b8fb53d93
-    password: ecfafe24a4d986
+    host: ${MAIL_HOST:sandbox.smtp.mailtrap.io}
+    port: ${MAIL_PORT:2525}
+    username: ${MAIL_USERNAME}
+    password: ${MAIL_PASSWORD}
     properties:
       mail:
         smtp:
@@ -44,7 +44,7 @@ spring:
 eureka:
   client:
     service-url:
-      defaultZone: http://eureka:eureka123@localhost:8761/eureka/
+      defaultZone: ${EUREKA_URL:http://eureka:change-me-in-production@localhost:8761/eureka/}
   instance:
     prefer-ip-address: true
 
@@ -53,7 +53,7 @@ stripe:
 
 logging:
   level:
-    fly2us.tn.payment: DEBUG
+    fly2us.tn.payment: INFO
 
 management:
   health:
