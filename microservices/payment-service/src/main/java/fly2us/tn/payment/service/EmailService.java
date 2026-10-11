@@ -5,6 +5,8 @@ import fly2us.tn.payment.model.Payment;
 import fly2us.tn.payment.model.VisaTarif;
 import jakarta.mail.internet.MimeMessage;
 import lombok.RequiredArgsConstructor;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.mail.javamail.MimeMessageHelper;
 import org.springframework.stereotype.Service;
@@ -15,18 +17,15 @@ import java.time.format.DateTimeFormatter;
 @RequiredArgsConstructor
 public class EmailService {
 
+    private static final Logger logger = LoggerFactory.getLogger(EmailService.class);
+
     private final JavaMailSender mailSender;
 
-    // ✅ Adresse fixe (Mailtrap accepte n'importe quel from)
     private final String fromEmail = "noreply@fly2us.tn";
 
     public void sendPaymentConfirmation(Payment payment, DossierDTO dossier, VisaTarif tarif, String clientEmail) {
-        System.out.println("═══════════════════════════════════════════");
-        System.out.println("📧 DÉBUT ENVOI EMAIL");
-        System.out.println("   From : " + fromEmail);
-        System.out.println("   To   : " + clientEmail);
-        System.out.println("   Dossier : " + dossier.getDossierNumber());
-        System.out.println("═══════════════════════════════════════════");
+        logger.info("Début envoi email - From: {}, To: {}, Dossier: {}",
+                fromEmail, clientEmail, dossier.getDossierNumber());
 
         try {
             MimeMessage message = mailSender.createMimeMessage();
@@ -34,20 +33,16 @@ public class EmailService {
 
             helper.setFrom(fromEmail);
             helper.setTo(clientEmail != null && !clientEmail.isEmpty() ? clientEmail : "client@example.com");
-            helper.setSubject("✅ Paiement confirmé - Dossier " + dossier.getDossierNumber());
+            helper.setSubject("Paiement confirmé - Dossier " + dossier.getDossierNumber());
             helper.setText(buildEmailHtml(payment, dossier, tarif), true);
 
-            System.out.println("📤 Envoi en cours...");
+            logger.debug("Envoi en cours...");
             mailSender.send(message);
-            System.out.println("✅ ✅ ✅ EMAIL ENVOYÉ AVEC SUCCÈS à " + clientEmail);
+            logger.info("Email envoyé avec succès à {}", clientEmail);
 
         } catch (Exception e) {
-            System.err.println("═══════════════════════════════════════════");
-            System.err.println("❌ ❌ ❌ ERREUR ENVOI EMAIL");
-            System.err.println("   Type : " + e.getClass().getName());
-            System.err.println("   Message : " + e.getMessage());
-            System.err.println("═══════════════════════════════════════════");
-            e.printStackTrace();
+            logger.error("Erreur envoi email (type: {}): {}",
+                    e.getClass().getName(), e.getMessage(), e);
             throw new RuntimeException("Erreur envoi email", e);
         }
     }

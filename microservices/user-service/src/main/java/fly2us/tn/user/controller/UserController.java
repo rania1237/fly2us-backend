@@ -5,6 +5,8 @@ import fly2us.tn.user.model.Role;
 import fly2us.tn.user.model.User;
 import fly2us.tn.user.service.UserService;
 import lombok.RequiredArgsConstructor;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -18,6 +20,8 @@ import java.util.Map;
 @CrossOrigin(origins = "http://localhost:4200")
 public class UserController {
 
+    private static final Logger logger = LoggerFactory.getLogger(UserController.class);
+
     private final UserService userService;
 
     @GetMapping("/hello")
@@ -29,10 +33,8 @@ public class UserController {
     @PostMapping("/signup")
     public ResponseEntity<?> register(@RequestBody Map<String, String> request) {
         try {
-            System.out.println("📝 Inscription reçue:");
-            System.out.println("  - email: " + request.get("email"));
-            System.out.println("  - firstName: " + request.get("firstName"));
-            System.out.println("  - lastName: " + request.get("lastName"));
+            logger.debug("Inscription reçue: email={}, firstName={}, lastName={}",
+                    request.get("email"), request.get("firstName"), request.get("lastName"));
 
             String email = request.get("email");
             String password = request.get("password");
@@ -41,7 +43,6 @@ public class UserController {
             String phone = request.get("phone");
             String roleStr = request.get("role");
 
-            // ✅ Vérifier les champs obligatoires
             if (email == null || email.isEmpty()) {
                 return ResponseEntity.badRequest().body("Email est obligatoire");
             }
@@ -55,11 +56,10 @@ public class UserController {
             Role role = (roleStr != null && roleStr.equalsIgnoreCase("ADMIN")) ? Role.ADMIN : Role.CLIENT;
 
             User user = userService.register(email, password, firstName, lastName, phone, role);
-            System.out.println("✅ Utilisateur créé: " + user.getEmail());
+            logger.info("Utilisateur créé: {}", user.getEmail());
             return ResponseEntity.ok(user);
         } catch (Exception e) {
-            System.err.println("❌ Erreur: " + e.getMessage());
-            e.printStackTrace();
+            logger.error("Erreur lors de l'inscription: {}", e.getMessage(), e);
             return ResponseEntity.badRequest().body(e.getMessage());
         }
     }
@@ -77,6 +77,7 @@ public class UserController {
             User user = userService.registerAdmin(email, password, firstName, lastName, phone);
             return ResponseEntity.ok(user);
         } catch (Exception e) {
+            logger.error("Erreur lors de l'inscription admin: {}", e.getMessage(), e);
             return ResponseEntity.badRequest().body(e.getMessage());
         }
     }
@@ -94,6 +95,7 @@ public class UserController {
             response.put("email", email);
             return ResponseEntity.ok(response);
         } catch (Exception e) {
+            logger.error("Erreur lors de la connexion: {}", e.getMessage(), e);
             return ResponseEntity.badRequest().body(e.getMessage());
         }
     }
