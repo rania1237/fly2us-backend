@@ -16,13 +16,13 @@ spring:
 
   security:
     user:
-      name: admin
-      password: admin123
+      name: ${CONFIG_USER:admin}
+      password: ${CONFIG_PASSWORD:change-me-in-production}
 
 eureka:
   client:
     service-url:
-      defaultZone: http://localhost:8761/eureka/
+      defaultZone: ${EUREKA_URL:http://eureka:change-me-in-production@localhost:8761/eureka/}
 
 management:
   endpoints:
