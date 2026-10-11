@@ -26,11 +26,12 @@
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <spring-cloud.version>2022.0.3</spring-cloud.version>
 
-        <!-- ===== SonarQube ===== -->
-        <sonar.host.url>http://localhost:9000</sonar.host.url>
-        <sonar.token>sqp_0eaebc7bf6545e9cc66110d869a0fada8009b57d</sonar.token>
-        <sonar.projectKey>fly2us-backend-v2</sonar.projectKey>
-        <sonar.projectName>FLY2US Backend V2</sonar.projectName>
+        <!-- ===== SonarCloud ===== -->
+        <!-- Note: le token est fourni via GitHub Secrets (SONAR_TOKEN), jamais dans ce fichier -->
+        <sonar.host.url>https://sonarcloud.io</sonar.host.url>
+        <sonar.organization>rania1237</sonar.organization>
+        <sonar.projectKey>rania1237_fly2us-backend</sonar.projectKey>
+        <sonar.projectName>FLY2US Backend</sonar.projectName>
         <sonar.moduleKey>${project.groupId}:${project.artifactId}</sonar.moduleKey>
         <sonar.java.coveragePlugin>jacoco</sonar.java.coveragePlugin>
         <sonar.coverage.jacoco.xmlReportPaths>${project.basedir}/target/site/jacoco/jacoco.xml</sonar.coverage.jacoco.xmlReportPaths>
