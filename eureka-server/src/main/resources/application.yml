@@ -1,31 +1,21 @@
 server:
-  port: 8888
+  port: 8761
 
 spring:
   application:
-    name: config-server
-
-  profiles:
-    active: native
-
-  cloud:
-    config:
-      server:
-        native:
-          search-locations: classpath:/config
-
-  security:
-    user:
-      name: ${CONFIG_USER:admin}
-      password: ${CONFIG_PASSWORD:change-me-in-production}
+    name: eureka-server
 
 eureka:
   client:
+    register-with-eureka: false
+    fetch-registry: false
     service-url:
-      defaultZone: ${EUREKA_URL:http://eureka:change-me-in-production@localhost:8761/eureka/}
+      defaultZone: http://localhost:8761/eureka/
+  server:
+    enable-self-preservation: false
 
 management:
   endpoints:
     web:
       exposure:
-        include: health,info,refresh
+        include: health,info
